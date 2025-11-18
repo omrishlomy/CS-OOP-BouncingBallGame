@@ -14,5 +14,6 @@ public class BrickerGameManager extends GameManager{
    int four = 4;
    int five = 5;
    int six = 6;
+   int seven = 7;
   }
  }
