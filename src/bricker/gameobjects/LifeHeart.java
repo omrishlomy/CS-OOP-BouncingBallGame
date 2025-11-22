@@ -5,7 +5,8 @@ import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
-public class LifeHeart extends GameObject {
+// package private not a part of the API
+class LifeHeart extends GameObject {
     private boolean active = true;
     private boolean addLife = false;
     public LifeHeart(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable) {
