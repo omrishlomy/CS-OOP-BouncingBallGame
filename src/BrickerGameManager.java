@@ -1,9 +1,8 @@
-import bricker.brick.CollisionStrategy;
-import bricker.brick.CollisionStrategyFactory;
+import bricker.brick_strategies.CollisionStrategy;
+import bricker.brick_strategies.CollisionStrategyFactory;
 import bricker.gameobjects.Ball;
 import bricker.gameobjects.Paddle;
-import bricker.brick.Brick;
-import bricker.brick.CollisionStrategyFactory;
+import bricker.brick_strategies.Brick;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
@@ -11,8 +10,6 @@ import danogl.collisions.Layer;
 import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-
-import java.util.Random;
 
 
 public class BrickerGameManager extends GameManager{
@@ -36,7 +33,7 @@ public class BrickerGameManager extends GameManager{
 	 private void createClassicBricks(ImageReader imageReader){
 	  Renderable brickImage = imageReader.readImage("assets/brick.png", true);
 	  GameObjectCollection gameObjectCollection = gameObjects();
-	  CollisionStrategy strategy = new CollisionStrategyFactory().createStrategyFactory(gameObjectCollection);
+	  CollisionStrategy strategy = new CollisionStrategyFactory().createStrategyFactory(gameObjectCollection,imageReader,"Basic");
 	  for (int row = 0; row < bricksInCol; row++) {
 	   for (int col = 0; col < bricksInRow; col++) {
 

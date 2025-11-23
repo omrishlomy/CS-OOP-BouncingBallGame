@@ -1,7 +1,6 @@
-package bricker.brick;
+package bricker.brick_strategies;
 
 import danogl.GameObject;
-import danogl.collisions.Collision;
 
 public interface CollisionStrategy {
     public void onCollision(GameObject thisObj, GameObject otherObj);

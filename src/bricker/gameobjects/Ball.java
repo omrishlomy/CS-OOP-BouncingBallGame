@@ -8,11 +8,13 @@ import danogl.util.Vector2;
 
 public class Ball extends GameObject {
     private Sound collisionSound;
+	private Renderable renderable;
     private int collisionCounter; // counts the number of times a ball collides with another object.
 
     public Ball(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
+		this.renderable = renderable;
     }
 
     @Override

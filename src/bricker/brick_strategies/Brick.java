@@ -1,13 +1,12 @@
-package bricker.brick;
-
+package bricker.brick_strategies;
 import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 public class Brick extends GameObject {
- private static final int HIGHT = 15;
- private int width;
+ private static final int HEIGHT = 15;
+ private float width;
  private final CollisionStrategy collisionStrategy;
  private final float row;
  private final float col;
