@@ -1,5 +1,5 @@
 package bricker.brick_strategies;
-
+import bricker.gameobjects.Brick;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.AABB.AABBCollider;
@@ -10,19 +10,19 @@ import danogl.gui.rendering.Renderable;
 import bricker.BrickerGameManager;
 
 // package protected - not part of API
-class ExplosionStrategy implements bricker.brick.CollisionStrategy {
-    private final BrickerGameManager gameManeger;
+class ExplosionStrategy implements CollisionStrategy {
+    private final BrickerGameManager gameManager;
 
 
     // constructor receives explosion sound, the game objects and a list of the bricks
     public ExplosionStrategy(BrickerGameManager gameManeger) {
-        this.gameManeger = gameManeger;
+        this.gameManager = gameManeger;
     }
 
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
         // play the sound
-        Sound explosionSound = gameManeger.getExplosionSound();
+        Sound explosionSound = gameManager.getExplosionSound();
         explosionSound.play();
 
         // explode neighbors
@@ -34,7 +34,7 @@ class ExplosionStrategy implements bricker.brick.CollisionStrategy {
         int[][] neighbors = {{rowInGrid - 1, colInGrid}, {rowInGrid+1, colInGrid},
                 {rowInGrid, colInGrid-1}, {rowInGrid,  colInGrid+1}};
         for (int[] neighbor : neighbors) {
-            Brick neighborBrick = GameManager.getBrick(neighbor[0], neighbor[1]);
+            Brick neighborBrick = gameManager.getBrick(neighbor[0], neighbor[1]);
             neighborBrick.onCollisionEnter(currBrick, null);
         }
     }

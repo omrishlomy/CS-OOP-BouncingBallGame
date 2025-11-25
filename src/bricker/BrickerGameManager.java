@@ -4,6 +4,7 @@ import bricker.brick_strategies.CollisionStrategyFactory;
 import bricker.gameobjects.Ball;
 import bricker.gameobjects.Paddle;
 import bricker.gameobjects.Brick;
+import bricker.gameobjects.Puck;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
@@ -16,7 +17,7 @@ import java.util.Random;
 
 
 public class BrickerGameManager extends GameManager{
-     private static final float BALL_VELOCITY=100;
+     private static final float BALL_VELOCITY=250;
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
 	 private float RUNNER_HIGHT = 500;
@@ -31,7 +32,6 @@ public class BrickerGameManager extends GameManager{
 	 private ImageReader imageReader;
 	 private SoundReader soundReader;
 	 private WindowController windowController;
-	 private GameObjectCollection gameObjectCollection;
 	 private UserInputListener inputListener;
 	 private Renderable ballImage;
 	 private Renderable brickImage;
@@ -50,15 +50,15 @@ public class BrickerGameManager extends GameManager{
 	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HIGHT),null);
 	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0), new Vector2(spacing, RUNNER_HIGHT),null);
 	  GameObject upperWall = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, spacing),null);
-	  gameObjectCollection.addGameObject(leftWall);
-	  gameObjectCollection.addGameObject(rightWall);
-	  gameObjectCollection.addGameObject(upperWall);
+	  gameObjects().addGameObject(leftWall);
+	  gameObjects().addGameObject(rightWall);
+	  gameObjects().addGameObject(upperWall);
 	 }
 	 private void createClassicBricks(ImageReader imageReader){
-	  CollisionStrategy strategy = new CollisionStrategyFactory().createStrategyFactory(this);
 	  for (int row = 0; row < bricksInCol; row++) {
 	   for (int col = 0; col < bricksInRow; col++) {
 
+	  CollisionStrategy strategy = new CollisionStrategyFactory().createStrategyFactory(this);
 		float x = marginX + col * (brickWidth + spacing);
 		float y = marginY + row * (brickHeight + spacing);
 
@@ -71,20 +71,20 @@ public class BrickerGameManager extends GameManager{
 				col
 		);
 		bricksGrid[row][col] = brick;
-		gameObjectCollection.addGameObject(brick);
+		gameObjects().addGameObject(brick);
 	   }
 	  }
 
 	 }
 	 private void createBackground(ImageReader imageReader){
 	  GameObject background = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, RUNNER_HIGHT), backgroundImage);
-	  gameObjectCollection.addGameObject(background,Layer.BACKGROUND);
+	  gameObjects().addGameObject(background,Layer.BACKGROUND);
 	 }
 	 private void createBall(){
         GameObject ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
         ball.setVelocity(Vector2.DOWN.mult(BALL_VELOCITY));
         ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
-        gameObjectCollection.addGameObject(ball);
+        gameObjects().addGameObject(ball);
 
 	 }
 	 private void createPaddle(){
@@ -96,7 +96,7 @@ public class BrickerGameManager extends GameManager{
         userPaddle.setCenter(
                 new Vector2(windowController.getWindowDimensions().x()/2,
                         (int)windowController.getWindowDimensions().y()-30));
-        gameObjectCollection.addGameObject(userPaddle);
+        gameObjects().addGameObject(userPaddle);
 	 }
      public BrickerGameManager(String windowTitle, Vector2 windowDimensions,int numCols,int numRows) {
         super(windowTitle, windowDimensions);
@@ -105,8 +105,7 @@ public class BrickerGameManager extends GameManager{
 		this.bricksInRow = numCols;
 		this.bricksInCol = numRows;
 	 	brickWidth = (RUNNER_WIDTH - 2 * marginX - (bricksInRow - 1) * spacing) / bricksInRow;
-		this.gameObjectCollection = gameObjects();
-		bricksGrid = new Brick[bricksInRow][numRows];
+		bricksGrid = new Brick[numRows][numCols];
      }
 
     // this is just to check the code NEED TO CHANGE !!!!!!
@@ -137,6 +136,12 @@ public class BrickerGameManager extends GameManager{
 	 	createBackground(imageReader);
 
     }
+	public void createPuck(Vector2 location){
+	 Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound); //50 is the ball size, need to replace with constants
+	 firstPuck.initVelocity();
+	 gameObjects().addGameObject(firstPuck);
+	}
+
 
  public SoundReader getSoundReader() {
   return soundReader;
@@ -160,6 +165,15 @@ public class BrickerGameManager extends GameManager{
  }
  public Sound getExplosionSound() {
   return explosionSound;
+ }
+ public Brick getBrick(int row,int col){
+	  return bricksGrid[row][col];
+ }
+ public void addGameObject(GameObject gameObject){
+    gameObjects().addGameObject(gameObject);
+ }
+ public void removeGameObject(GameObject gameObject){
+	  gameObjects().removeGameObject(gameObject);
  }
     public static void main(String[] args) {
 	  if (args.length>=2){
