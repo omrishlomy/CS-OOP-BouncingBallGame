@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.AABB.AABBCollider;
@@ -10,7 +11,7 @@ import danogl.gui.rendering.Renderable;
 import bricker.BrickerGameManager;
 
 // package protected - not part of API
-class ExplosionStrategy implements bricker.brick.CollisionStrategy {
+class ExplosionStrategy implements CollisionStrategy {
     private final BrickerGameManager gameManeger;
 
 
@@ -34,7 +35,8 @@ class ExplosionStrategy implements bricker.brick.CollisionStrategy {
         int[][] neighbors = {{rowInGrid - 1, colInGrid}, {rowInGrid+1, colInGrid},
                 {rowInGrid, colInGrid-1}, {rowInGrid,  colInGrid+1}};
         for (int[] neighbor : neighbors) {
-            Brick neighborBrick = GameManager.getBrick(neighbor[0], neighbor[1]);
+            Brick neighborBrick = gameManager.getBrick(neighbor[0], neighbor[1]);
+
             neighborBrick.onCollisionEnter(currBrick, null);
         }
     }

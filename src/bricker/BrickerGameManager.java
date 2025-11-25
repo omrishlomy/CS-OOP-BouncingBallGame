@@ -172,6 +172,5 @@ public class BrickerGameManager extends GameManager{
 	   GameManager gameManager =new BrickerGameManager(" gameManager example =",new Vector2(700,500),8,7);
 	   gameManager.run();
 	  }
-
       }
 }
