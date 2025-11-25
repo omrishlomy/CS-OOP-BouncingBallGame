@@ -6,10 +6,10 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 // package private not a part of the API
-class LifeHeart extends GameObject {
+class AddLifeHeart extends GameObject {
     private boolean active = true;
     private boolean addLife = false;
-    public LifeHeart(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable) {
+    public AddLifeHeart(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable) {
         super(topLeftCorner, dimensions, renderable);
     }
 
