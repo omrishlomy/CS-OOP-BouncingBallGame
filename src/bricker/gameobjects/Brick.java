@@ -53,5 +53,9 @@ public class Brick extends GameObject {
     public float getHeight() {
         return height;
     }
+
+    public void explode(GameObject other) {
+         collisionStrategy.onCollision(this, other);
+    }
 }
 

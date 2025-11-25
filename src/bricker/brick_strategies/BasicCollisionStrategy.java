@@ -12,6 +12,10 @@ public class BasicCollisionStrategy implements CollisionStrategy {
 	}
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
-	 gameManager.removeGameObject(thisObj);
+        // remove the brick from the game object collection
+        gameManager.removeGameObject(thisObj);
+        // set the bricks array to be null in the current brick position
+         Brick thisBrick = (Brick) thisObj;
+         gameManager.setBrick(thisBrick.getRowInGrid(), thisBrick.getColInGrid(), null);
     }
 }

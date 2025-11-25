@@ -35,9 +35,10 @@ class ExplosionStrategy implements CollisionStrategy {
         int[][] neighbors = {{rowInGrid - 1, colInGrid}, {rowInGrid+1, colInGrid},
                 {rowInGrid, colInGrid-1}, {rowInGrid,  colInGrid+1}};
         for (int[] neighbor : neighbors) {
-            Brick neighborBrick = gameManager.getBrick(neighbor[0], neighbor[1]);
-
-            neighborBrick.onCollisionEnter(currBrick, null);
+            Brick neighborBrick = gameManeger.getBrick(neighbor[0], neighbor[1]);
+            if (neighborBrick != null){
+                neighborBrick.explode(thisObj);
+            }
         }
     }
 }

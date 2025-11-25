@@ -1,5 +1,6 @@
 package bricker.gameobjects;
 
+import bricker.brick_strategies.CollisionStrategy;
 import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
@@ -7,27 +8,34 @@ import danogl.util.Vector2;
 
 // package private not a part of the API
 class AddLifeHeart extends GameObject {
-    private boolean active = true;
     private boolean addLife = false;
-    public AddLifeHeart(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable) {
+    private final CollisionStrategy  collisionStrategy;
+    public AddLifeHeart(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
+                        CollisionStrategy collisionStrategy) {
         super(topLeftCorner, dimensions, renderable);
+        this.collisionStrategy = collisionStrategy;
     }
+
+
 
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        active = false;
         // add a life if collides with paddle
-        if (other instanceof Paddle) {
-            addLife = true;
+        if (other.getTag().equals("paddle")) {
+            addLife = true;  // we need to add a life
+            collisionStrategy.onCollision(this, other); // remove the heart
         }
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+
     }
 
     public boolean isAddLife() {
         return addLife;
     }
 
-    public boolean isActive() {
-        return active;
-    }
 }

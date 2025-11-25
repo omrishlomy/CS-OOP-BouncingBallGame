@@ -1,6 +1,7 @@
 package bricker.gameobjects;
 
 import danogl.GameObject;
+import danogl.collisions.Collision;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
@@ -16,8 +17,16 @@ public class Paddle extends GameObject {
                   UserInputListener userInputListener) {
         super(topLeftCorner, dimensions, renderable);
         this.userInputListener = userInputListener;
+        this.setTag("paddle");
     }
 
+    @Override
+    public void onCollisionEnter(GameObject other, Collision collision) {
+        super.onCollisionEnter(other, collision);
+        if (other.getTag().equals("wall")){
+            setVelocity(Vector2.ZERO);
+        }
+    }
 
     @Override
     public void update(float deltaTime) {
