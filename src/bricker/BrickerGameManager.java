@@ -13,22 +13,21 @@ import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
-import java.util.Random;
-
 
 public class BrickerGameManager extends GameManager{
      private static final float BALL_VELOCITY=250;
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
-	 private float RUNNER_HIGHT = 500;
-	 private float RUNNER_WIDTH = 700;
  	 private static final int marginX = 10;
 	 private static final int marginY = 10;
 	 private static final int spacing = 5;
 	 private static final int brickHeight = 15;
 	 private static float brickWidth;
-	 private int bricksInRow = 8;
-	 private int bricksInCol = 7;
+	 private float RUNNER_HIGHT = 500;
+	 private float RUNNER_WIDTH = 700;
+	 private int colsNum = 8;
+	 private int rowsNum = 7;
+	 private int paddlesNum = 1;
 	 private ImageReader imageReader;
 	 private SoundReader soundReader;
 	 private WindowController windowController;
@@ -55,8 +54,8 @@ public class BrickerGameManager extends GameManager{
 	  gameObjects().addGameObject(upperWall);
 	 }
 	 private void createClassicBricks(ImageReader imageReader){
-	  for (int row = 0; row < bricksInCol; row++) {
-	   for (int col = 0; col < bricksInRow; col++) {
+	  for (int row = 0; row < rowsNum; row++) {
+	   for (int col = 0; col < colsNum; col++) {
 
 	  CollisionStrategy strategy = new CollisionStrategyFactory().createStrategyFactory(this);
 		float x = marginX + col * (brickWidth + spacing);
@@ -102,9 +101,9 @@ public class BrickerGameManager extends GameManager{
         super(windowTitle, windowDimensions);
 		RUNNER_HIGHT = windowDimensions.y();
 		RUNNER_WIDTH = windowDimensions.x();
-		this.bricksInRow = numCols;
-		this.bricksInCol = numRows;
-	 	brickWidth = (RUNNER_WIDTH - 2 * marginX - (bricksInRow - 1) * spacing) / bricksInRow;
+		this.colsNum = numCols;
+		this.rowsNum = numRows;
+	 	brickWidth = (RUNNER_WIDTH - 2 * marginX - (colsNum - 1) * spacing) / colsNum;
 		bricksGrid = new Brick[numRows][numCols];
      }
 
@@ -167,6 +166,9 @@ public class BrickerGameManager extends GameManager{
   return explosionSound;
  }
  public Brick getBrick(int row,int col){
+	  if(row<0 || row>=rowsNum || col<0 || col>= colsNum){
+	   return null;
+	  }
 	  return bricksGrid[row][col];
  }
  public void addGameObject(GameObject gameObject){
@@ -174,6 +176,13 @@ public class BrickerGameManager extends GameManager{
  }
  public void removeGameObject(GameObject gameObject){
 	  gameObjects().removeGameObject(gameObject);
+ }
+ public void updatePaddleNum(){
+	  if(paddlesNum==1){
+	   paddlesNum++;
+	  	return;
+	  }
+	  paddlesNum--;
  }
     public static void main(String[] args) {
 	  if (args.length>=2){
