@@ -14,24 +14,24 @@ public class CollisionStrategyFactory {
  public CollisionStrategy createStrategyFactory(BrickerGameManager gameManager) {
   Random rand = new Random();
   if (rand.nextBoolean()) {
-   return new BasicCollisionStrategy(gameManager.getGameObjectCollection());
+   return new ExplosionStrategy(gameManager);
   }
   int strategyNum = rand.nextInt(5);
   if(strategyNum==0) {
-   return new PuckStrategy(gameManager.getGameObjectCollection(),gameManager.getImageReader(),gameManager.getSoundReader());
+   return new PuckStrategy(gameManager);
   }
   if(strategyNum==1) {
-   return new AddPaddleStrategy(gameObjectCollection,gameManager);
+   return new BasicCollisionStrategy(gameManager);
 
   }
   if(strategyNum==2) {
-   return new ExplosionStrategy(this);
+   return new ExplosionStrategy(gameManager);
   }
   if(strategyNum==3) {
-   return new AddLifeSrategy(this);
+   return new BasicCollisionStrategy(gameManager);
   }
   if(strategyNum==4) {
-   return new DoubleStrategy(this);
+   return new BasicCollisionStrategy(gameManager);
   }
   return null;
  }

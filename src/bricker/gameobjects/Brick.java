@@ -1,5 +1,6 @@
 package bricker.gameobjects;
 import danogl.GameObject;
+import bricker.brick_strategies.CollisionStrategy;
 import danogl.collisions.Collision;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
@@ -7,14 +8,14 @@ import danogl.util.Vector2;
 public class Brick extends GameObject {
      private final float width;
      private final float height;
-     private final bricker.brick.CollisionStrategy collisionStrategy;
+     private final CollisionStrategy collisionStrategy;
      private final float row;
      private final float col;
      private final int rowInGrid;
      private final int colInGrid;
      //constructor with Collision strategy
      public Brick(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable ,
-                  bricker.brick.CollisionStrategy collisionStrategy, int rowInGrid, int colInGrid) {
+                  CollisionStrategy collisionStrategy, int rowInGrid, int colInGrid) {
       super(topLeftCorner,dimensions,renderable);
       this.row = topLeftCorner.y();
       this.col = topLeftCorner.x();
@@ -28,8 +29,6 @@ public class Brick extends GameObject {
      public void onCollisionEnter(GameObject other, Collision collision) {
       collisionStrategy.onCollision(this, other);
      }
-
-
 
      public float getCol() {
       return col;
