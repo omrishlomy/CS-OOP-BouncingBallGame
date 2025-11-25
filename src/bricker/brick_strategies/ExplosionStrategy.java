@@ -1,5 +1,6 @@
 package bricker.brick_strategies;
 
+import bricker.gameobjects.Brick;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
 import danogl.gui.Sound;
