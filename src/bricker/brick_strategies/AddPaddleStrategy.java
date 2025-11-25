@@ -7,25 +7,19 @@ import danogl.collisions.GameObjectCollection;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
-public class AddPaddleStrategy {
+public class AddPaddleStrategy implements CollisionStrategy{
  private BrickerGameManager brickerGameManager;
+ private static int paddleNum=1;
  public AddPaddleStrategy(BrickerGameManager brickerGameManager) {
   this.brickerGameManager = brickerGameManager;
-  brickerGameManager.updatePaddleNum();
  }
  @Override
  public void onCollision(GameObject thisObj, GameObject otherObj) {
-  gameObjectCollection.removeGameObject(thisObj);
-  if(paddleNum==2){
-   return;
-  }
-  Vector2 paddleLocation = new Vector2(brickerGameManager.windowController.getWindowDimensions().x()/2,
-		  brickerGameManager.windowController.getWindowDimensions().y()/2);
-  Renderable paddleImage = brickerGameManager.getImageReader().readImage("assets/Paddle.png",true);
-  ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(100,10),paddleImage,
-		  brickerGameManager.userInputListener,
-		  4,
-		  new BasicCollisionStrategy(gameObjectCollection));
-  gameObjectCollection.addGameObject(extraPaddle);
+  brickerGameManager.removeGameObject(thisObj);
+   if(ExtraPaddle.getPaddlesNum()==1){
+	return;
+   }
+  brickerGameManager.createExtraPaddle();
+   paddleNum++;
  }
 }
