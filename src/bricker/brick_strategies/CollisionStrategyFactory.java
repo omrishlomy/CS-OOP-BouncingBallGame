@@ -8,30 +8,38 @@ import danogl.gui.SoundReader;
 import java.util.Random;
 
 public class CollisionStrategyFactory {
- public CollisionStrategyFactory() {
+ private BasicCollisionStrategy basicCollisionStrategy;
+ private PuckStrategy puckStrategy;
+ private ExplosionStrategy explosionStrategy;
+ private AddPaddleStrategy addPaddleStrategy;
+ public CollisionStrategyFactory(BrickerGameManager ganeManager) {
+  basicCollisionStrategy = new BasicCollisionStrategy(ganeManager);
+  puckStrategy = new PuckStrategy(ganeManager);
+  explosionStrategy = new ExplosionStrategy(ganeManager);
+  addPaddleStrategy = new AddPaddleStrategy(ganeManager);
  }
 
- public CollisionStrategy createStrategyFactory(BrickerGameManager gameManager) {
+ public CollisionStrategy createStrategyFactory() {
   Random rand = new Random();
   if (rand.nextBoolean()) {
-   return new ExplosionStrategy(gameManager);
+   return basicCollisionStrategy;
   }
   int strategyNum = rand.nextInt(5);
   if(strategyNum==0) {
-   return new PuckStrategy(gameManager);
+   return puckStrategy;
   }
   if(strategyNum==1) {
-   return new BasicCollisionStrategy(gameManager);
+   return addPaddleStrategy;
 
   }
   if(strategyNum==2) {
-   return new ExplosionStrategy(gameManager);
+   return explosionStrategy;
   }
   if(strategyNum==3) {
-   return new BasicCollisionStrategy(gameManager);
+   return basicCollisionStrategy;
   }
   if(strategyNum==4) {
-   return new BasicCollisionStrategy(gameManager);
+   return basicCollisionStrategy;
   }
   return null;
  }

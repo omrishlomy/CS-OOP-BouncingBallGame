@@ -10,6 +10,7 @@ import danogl.util.Vector2;
 
 // package private - not part of the API : HAVE TO BE PUBLIC FOR BEING CALLED FROM THE STRATEGY PACKAGE
 public class ExtraPaddle extends Paddle {
+ 	private static int extraPaddleNum=0;
     int numCollisionsBeforeDisappear;
 	CollisionStrategy collisionStrategy;
     // indicatinf if the paddle is active, if it's false we need to remove it from the game objects and not
@@ -22,6 +23,7 @@ public class ExtraPaddle extends Paddle {
         super(topLeftCorner, dimensions, renderable, userInputListener);
         this.numCollisionsBeforeDisappear = numCollisionsBeforeDisapear;
 		this.collisionStrategy = collisionStrategy;
+		extraPaddleNum++;
     }
 
     @Override
@@ -37,10 +39,14 @@ public class ExtraPaddle extends Paddle {
   {
     super.update(deltaTime);
 	if(!active){
+	 extraPaddleNum--;
 	 collisionStrategy.onCollision(this,this);
 	}
   }
     public boolean isActive() {
         return active;
     }
+	public static int getPaddlesNum(){
+	 return extraPaddleNum;
+	}
 }

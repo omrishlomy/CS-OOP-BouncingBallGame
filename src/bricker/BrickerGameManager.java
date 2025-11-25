@@ -1,10 +1,8 @@
 package bricker;
+import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.brick_strategies.CollisionStrategyFactory;
-import bricker.gameobjects.Ball;
-import bricker.gameobjects.Paddle;
-import bricker.gameobjects.Brick;
-import bricker.gameobjects.Puck;
+import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
@@ -18,6 +16,7 @@ public class BrickerGameManager extends GameManager{
      private static final float BALL_VELOCITY=250;
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
+	  private static final int EXTRA_PADDLE_HITS=4;
  	 private static final int marginX = 10;
 	 private static final int marginY = 10;
 	 private static final int spacing = 5;
@@ -47,17 +46,21 @@ public class BrickerGameManager extends GameManager{
 	 private void createWalls(){
 	  //Walls
 	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HIGHT),null);
+	  leftWall.setTag("Wall");
 	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0), new Vector2(spacing, RUNNER_HIGHT),null);
+	  rightWall.setTag("Wall");
 	  GameObject upperWall = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, spacing),null);
+	  upperWall.setTag("Wall");
 	  gameObjects().addGameObject(leftWall);
 	  gameObjects().addGameObject(rightWall);
 	  gameObjects().addGameObject(upperWall);
 	 }
 	 private void createClassicBricks(ImageReader imageReader){
+	  CollisionStrategyFactory strategyFactory = new CollisionStrategyFactory(this);
 	  for (int row = 0; row < rowsNum; row++) {
 	   for (int col = 0; col < colsNum; col++) {
 
-	  CollisionStrategy strategy = new CollisionStrategyFactory().createStrategyFactory(this);
+	  CollisionStrategy strategy = strategyFactory.createStrategyFactory();
 		float x = marginX + col * (brickWidth + spacing);
 		float y = marginY + row * (brickHeight + spacing);
 
@@ -140,7 +143,15 @@ public class BrickerGameManager extends GameManager{
 	 firstPuck.initVelocity();
 	 gameObjects().addGameObject(firstPuck);
 	}
-
+	public void createExtraPaddle(){
+	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
+			 windowController.getWindowDimensions().y()/2);
+	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
+			 inputListener,
+			 EXTRA_PADDLE_HITS,
+			 new BasicCollisionStrategy(this));
+	 addGameObject(extraPaddle);
+	}
 
  public SoundReader getSoundReader() {
   return soundReader;
@@ -153,7 +164,6 @@ public class BrickerGameManager extends GameManager{
  public WindowController getWindowController() {
   return windowController;
  }
-
 
  public GameObjectCollection getGameObjectCollection(GameObjectCollection gameObjectCollection) {
   return gameObjectCollection;
@@ -171,18 +181,14 @@ public class BrickerGameManager extends GameManager{
 	  }
 	  return bricksGrid[row][col];
  }
+ public void setBrick(int row,int col,Brick brick){
+	  this.bricksGrid[row][col]= brick;
+ }
  public void addGameObject(GameObject gameObject){
     gameObjects().addGameObject(gameObject);
  }
  public void removeGameObject(GameObject gameObject){
 	  gameObjects().removeGameObject(gameObject);
- }
- public void updatePaddleNum(){
-	  if(paddlesNum==1){
-	   paddlesNum++;
-	  	return;
-	  }
-	  paddlesNum--;
  }
     public static void main(String[] args) {
 	  if (args.length>=2){
