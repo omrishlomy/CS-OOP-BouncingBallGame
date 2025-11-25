@@ -26,15 +26,12 @@ public class BrickerGameManager extends GameManager{
 	 private float RUNNER_HIGHT = 500;
 	 private float RUNNER_WIDTH = 700;
 
-     // save bricks in a list so it's easy to access a certain brick
-     private final Brick[][] bricks =  new Brick[bricksInCol][bricksInRow];
-
 	 private void createWalls(){
 	  //Walls
 	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HIGHT),null);
 	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0), new Vector2(spacing, RUNNER_HIGHT),null);
-	  gameObjects().addGameObject(leftWall, Layer.STATIC_OBJECTS);
-	  gameObjects().addGameObject(rightWall, Layer.STATIC_OBJECTS);
+	  gameObjects().addGameObject(leftWall);
+	  gameObjects().addGameObject(rightWall);
 	 }
 	 private void createClassicBricks(ImageReader imageReader){
 	  Renderable brickImage = imageReader.readImage("assets/brick.png", true);
@@ -54,8 +51,6 @@ public class BrickerGameManager extends GameManager{
 		);
 
 		gameObjects().addGameObject(brick);
-        // also add to the bricks
-        bricks[row][col] = brick;
 	   }
 	  }
 
@@ -74,39 +69,30 @@ public class BrickerGameManager extends GameManager{
 	 	brickWidth = (RUNNER_WIDTH - 2 * marginX - (bricksInRow - 1) * spacing) / bricksInRow;
      }
 
-     public void createBall(ImageReader imageReader, SoundReader soundReader, WindowController windowController){
-         Renderable ballImage = imageReader.readImage("assets/ball.png", true);
-         Sound collisionSound = soundReader.readSound("assets/blop.wav");
-         GameObject ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
-         ball.setVelocity(Vector2.DOWN.mult(100));
-         ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
-         gameObjects().addGameObject(ball);
-     }
-
-     public void createPaddle(ImageReader imageReader, SoundReader soundReader,
-                              WindowController windowController, UserInputListener inputListener){
-         Renderable paddleImage = imageReader.readImage("assets/Paddle.png", true);
-         GameObject userPaddle = new Paddle(
-                 Vector2.ZERO,
-                 new Vector2(100, 10),
-                 paddleImage,
-                 inputListener);
-
-         userPaddle.setCenter(
-                 new Vector2(windowController.getWindowDimensions().x()/2,
-                         (int)windowController.getWindowDimensions().y()-30));
-         gameObjects().addGameObject(userPaddle);
-     }
-
     // this is just to check the code NEED TO CHANGE !!!!!!
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
         // ball
-        createBall(imageReader, soundReader, windowController);
+        Renderable ballImage = imageReader.readImage("assets/ball.png", true);
+        Sound collisionSound = soundReader.readSound("assets/blop.wav");
+        GameObject ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
+        ball.setVelocity(Vector2.DOWN.mult(100));
+        ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
+        gameObjects().addGameObject(ball);
 
         // paddle
-        createPaddle(imageReader, soundReader, windowController,  inputListener);
+        Renderable paddleImage = imageReader.readImage("assets/Paddle.png", true);
+        GameObject userPaddle = new Paddle(
+                Vector2.ZERO,
+                new Vector2(100, 10),
+                paddleImage,
+                inputListener);
+
+        userPaddle.setCenter(
+                new Vector2(windowController.getWindowDimensions().x()/2,
+                        (int)windowController.getWindowDimensions().y()-30));
+        gameObjects().addGameObject(userPaddle);
 
 		//Bricks
 	 	createClassicBricks(imageReader);
@@ -128,5 +114,6 @@ public class BrickerGameManager extends GameManager{
 	   GameManager gameManager =new BrickerGameManager(" gameManager example =",new Vector2(700,500),8,7);
 	   gameManager.run();
 	  }
+
       }
  }

@@ -11,11 +11,13 @@ public class Paddle extends GameObject {
     private static final float MOVMENT_SPEED = 300;
     private final UserInputListener userInputListener;
 
+
     public Paddle(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
                   UserInputListener userInputListener) {
         super(topLeftCorner, dimensions, renderable);
         this.userInputListener = userInputListener;
     }
+
 
     @Override
     public void update(float deltaTime) {
