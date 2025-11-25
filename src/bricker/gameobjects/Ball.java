@@ -30,5 +30,5 @@ public class Ball extends GameObject {
 
     public int getCollisionCounter() {
         return collisionCounter;
-    }
+    } //this is not part of the API, may need to remove
 }

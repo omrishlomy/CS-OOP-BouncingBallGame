@@ -6,7 +6,7 @@ import danogl.util.Vector2;
 
 import java.util.Random;
 
-public class Puck extends Ball{
+ public class Puck extends Ball{
  private static final float RATIO = 0.75f;
  private static final float BALL_SPEED = 100;
  public void initVelocity(){
