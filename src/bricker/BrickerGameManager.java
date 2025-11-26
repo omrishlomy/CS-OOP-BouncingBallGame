@@ -90,7 +90,7 @@ public class BrickerGameManager extends GameManager{
         GameObject ball = new Ball(Vector2.ZERO, BALL_SHAPE, ballImage, collisionSound);
         ball.setVelocity(Vector2.DOWN.mult(BALL_VELOCITY));
         ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
-        gameObjects().addGameObject(ball);
+        gameObjects().addGameObject(ball,Layer.DEFAULT);
 
 	 }
 	 private void createPaddle(){
@@ -102,7 +102,8 @@ public class BrickerGameManager extends GameManager{
         userPaddle.setCenter(
                 new Vector2(windowController.getWindowDimensions().x()/2,
                         (int)windowController.getWindowDimensions().y()-30));
-        gameObjects().addGameObject(userPaddle);
+		userPaddle.setTag("Paddle");
+        gameObjects().addGameObject(userPaddle,Layer.STATIC_OBJECTS);
 	 }
      public BrickerGameManager(String windowTitle, Vector2 windowDimensions,int numCols,int numRows) {
         super(windowTitle, windowDimensions);
@@ -145,7 +146,7 @@ public class BrickerGameManager extends GameManager{
 	public void createPuck(Vector2 location){
 	 Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound); //50 is the ball size, need to replace with constants
 	 firstPuck.initVelocity();
-	 gameObjects().addGameObject(firstPuck);
+	 gameObjects().addGameObject(firstPuck,Layer.DEFAULT);
 	}
 	public void createExtraPaddle(){
 	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
@@ -154,12 +155,13 @@ public class BrickerGameManager extends GameManager{
 			 inputListener,
 			 EXTRA_PADDLE_HITS,
 			 new BasicCollisionStrategy(this));
-	 addGameObject(extraPaddle);
+	 extraPaddle.setTag("Paddle");
+	 gameObjects().addGameObject(extraPaddle,Layer.STATIC_OBJECTS);
 	}
 	public void createLife(Vector2 brickCenter){
 	  AddLifeHeart life = new AddLifeHeart(brickCenter,LIFE_SIZE,lifeImage,new BasicCollisionStrategy(this));
 	  life.setVelocity(Vector2.DOWN.mult(LIFE_VELOCITY));
-	  gameObjects().addGameObject(life);
+	  gameObjects().addGameObject(life,Layer.DEFAULT);
 	}
 
  public SoundReader getSoundReader() {

@@ -40,9 +40,6 @@ public class CollisionStrategyFactory {
   if(strategyNum==3) {
    return addLifeStrategy;
   }
-  if(strategyNum==4) {
    return basicCollisionStrategy;
-  }
-  return null;
  }
 }

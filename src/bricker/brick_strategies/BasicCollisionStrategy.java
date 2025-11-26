@@ -14,7 +14,12 @@ public class BasicCollisionStrategy implements CollisionStrategy {
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
         // remove the brick from the game object collection
-        gameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
+	 if(thisObj.getTag().equals("Brick")) {
+	  gameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
+	 }
+	 else{
+	  gameManager.removeGameObject(thisObj, Layer.DEFAULT);
+	 }
         // set the bricks array to be null in the current brick position
          if(thisObj.getTag().equals("Brick")) {
 		  Brick thisBrick = (Brick) thisObj;

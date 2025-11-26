@@ -15,7 +15,7 @@ public class AddLifeStrategy implements CollisionStrategy{
  public void onCollision(GameObject thisObj, GameObject otherObj) {
   Vector2 center = thisObj.getCenter();
   gameManager.createLife(center);
-  gameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
+  gameManager.removeGameObject(thisObj,Layer.STATIC_OBJECTS);
 
  }
 }

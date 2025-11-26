@@ -15,7 +15,7 @@ public class AddPaddleStrategy implements CollisionStrategy{
  }
  @Override
  public void onCollision(GameObject thisObj, GameObject otherObj) {
-  brickerGameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
+  brickerGameManager.removeGameObject(thisObj,Layer.STATIC_OBJECTS);
    if(ExtraPaddle.getPaddlesNum()==1){
 	return;
    }

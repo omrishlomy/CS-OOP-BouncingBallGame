@@ -18,7 +18,7 @@ public class PuckStrategy implements  CollisionStrategy {
  }
  @Override
  public void onCollision(GameObject thisObj, GameObject otherObj) {
-  gameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
+  gameManager.removeGameObject(thisObj,Layer.STATIC_OBJECTS);
   gameManager.createPuck(thisObj.getCenter());
   gameManager.createPuck(thisObj.getCenter());
 

@@ -22,7 +22,7 @@ public class AddLifeHeart extends GameObject {
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         // add a life if collides with paddle
-        if (other.getTag().equals("paddle")) {
+        if (other.getTag().equals("Paddle")) {
             addLife = true;  // we need to add a life
             collisionStrategy.onCollision(this, other); // remove the heart
         }
