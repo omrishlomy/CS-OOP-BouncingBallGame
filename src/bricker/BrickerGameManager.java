@@ -16,7 +16,10 @@ public class BrickerGameManager extends GameManager{
      private static final float BALL_VELOCITY=250;
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
+	  private static final float LIFE_VELOCITY=100;
 	  private static final int EXTRA_PADDLE_HITS=4;
+	  private static final Vector2 BALL_SHAPE = new Vector2(50,50);
+	  private static final Vector2 LIFE_SIZE=new Vector2(30,30);
  	 private static final int marginX = 10;
 	 private static final int marginY = 10;
 	 private static final int spacing = 5;
@@ -72,8 +75,9 @@ public class BrickerGameManager extends GameManager{
 				row,
 				col
 		);
+		brick.setTag("Brick");
 		bricksGrid[row][col] = brick;
-		gameObjects().addGameObject(brick);
+		gameObjects().addGameObject(brick,Layer.STATIC_OBJECTS);
 	   }
 	  }
 
@@ -83,7 +87,7 @@ public class BrickerGameManager extends GameManager{
 	  gameObjects().addGameObject(background,Layer.BACKGROUND);
 	 }
 	 private void createBall(){
-        GameObject ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
+        GameObject ball = new Ball(Vector2.ZERO, BALL_SHAPE, ballImage, collisionSound);
         ball.setVelocity(Vector2.DOWN.mult(BALL_VELOCITY));
         ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
         gameObjects().addGameObject(ball);
@@ -152,6 +156,11 @@ public class BrickerGameManager extends GameManager{
 			 new BasicCollisionStrategy(this));
 	 addGameObject(extraPaddle);
 	}
+	public void createLife(Vector2 brickCenter){
+	  AddLifeHeart life = new AddLifeHeart(brickCenter,LIFE_SIZE,lifeImage,new BasicCollisionStrategy(this));
+	  life.setVelocity(Vector2.DOWN.mult(LIFE_VELOCITY));
+	  gameObjects().addGameObject(life);
+	}
 
  public SoundReader getSoundReader() {
   return soundReader;
@@ -187,8 +196,8 @@ public class BrickerGameManager extends GameManager{
  public void addGameObject(GameObject gameObject){
     gameObjects().addGameObject(gameObject);
  }
- public void removeGameObject(GameObject gameObject){
-	  gameObjects().removeGameObject(gameObject);
+ public void removeGameObject(GameObject gameObject,int layer){
+	  gameObjects().removeGameObject(gameObject,layer);
  }
     public static void main(String[] args) {
 	  if (args.length>=2){

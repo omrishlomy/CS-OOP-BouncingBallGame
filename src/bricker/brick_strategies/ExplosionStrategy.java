@@ -6,6 +6,7 @@ import danogl.GameObject;
 import danogl.collisions.AABB.AABBCollider;
 import danogl.collisions.Collision;
 import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
 import bricker.BrickerGameManager;
@@ -37,8 +38,10 @@ class ExplosionStrategy implements CollisionStrategy {
         for (int[] neighbor : neighbors) {
             Brick neighborBrick = gameManeger.getBrick(neighbor[0], neighbor[1]);
             if (neighborBrick != null){
-                neighborBrick.explode(thisObj);
-            }
+			 neighborBrick.explode(thisObj);
+
+			}
         }
+		gameManeger.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
     }
 }

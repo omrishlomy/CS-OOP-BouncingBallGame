@@ -23,7 +23,7 @@ public class Paddle extends GameObject {
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
-        if (other.getTag().equals("wall")){
+        if (other.getTag().equals("Wall")){
             setVelocity(Vector2.ZERO);
         }
     }

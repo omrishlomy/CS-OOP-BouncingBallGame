@@ -12,11 +12,13 @@ public class CollisionStrategyFactory {
  private PuckStrategy puckStrategy;
  private ExplosionStrategy explosionStrategy;
  private AddPaddleStrategy addPaddleStrategy;
+ private AddLifeStrategy addLifeStrategy;
  public CollisionStrategyFactory(BrickerGameManager ganeManager) {
   basicCollisionStrategy = new BasicCollisionStrategy(ganeManager);
   puckStrategy = new PuckStrategy(ganeManager);
   explosionStrategy = new ExplosionStrategy(ganeManager);
   addPaddleStrategy = new AddPaddleStrategy(ganeManager);
+  addLifeStrategy = new AddLifeStrategy(ganeManager);
  }
 
  public CollisionStrategy createStrategyFactory() {
@@ -36,7 +38,7 @@ public class CollisionStrategyFactory {
    return explosionStrategy;
   }
   if(strategyNum==3) {
-   return basicCollisionStrategy;
+   return addLifeStrategy;
   }
   if(strategyNum==4) {
    return basicCollisionStrategy;

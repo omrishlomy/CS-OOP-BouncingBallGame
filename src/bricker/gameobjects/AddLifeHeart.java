@@ -7,7 +7,7 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 // package private not a part of the API
-class AddLifeHeart extends GameObject {
+public class AddLifeHeart extends GameObject {
     private boolean addLife = false;
     private final CollisionStrategy  collisionStrategy;
     public AddLifeHeart(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,

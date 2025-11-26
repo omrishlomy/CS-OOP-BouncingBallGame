@@ -4,6 +4,7 @@ import bricker.gameobjects.Puck;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 import danogl.gui.ImageReader;
 import danogl.gui.SoundReader;
 import danogl.gui.rendering.Renderable;
@@ -17,7 +18,7 @@ public class PuckStrategy implements  CollisionStrategy {
  }
  @Override
  public void onCollision(GameObject thisObj, GameObject otherObj) {
-  gameManager.removeGameObject(thisObj);
+  gameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
   gameManager.createPuck(thisObj.getCenter());
   gameManager.createPuck(thisObj.getCenter());
 

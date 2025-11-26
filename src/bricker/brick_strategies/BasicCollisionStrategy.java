@@ -4,6 +4,7 @@ import bricker.BrickerGameManager;
 import bricker.gameobjects.Brick;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
+import danogl.collisions.Layer;
 
 public class BasicCollisionStrategy implements CollisionStrategy {
  private final BrickerGameManager gameManager;
@@ -13,9 +14,11 @@ public class BasicCollisionStrategy implements CollisionStrategy {
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
         // remove the brick from the game object collection
-        gameManager.removeGameObject(thisObj);
+        gameManager.removeGameObject(thisObj, Layer.STATIC_OBJECTS);
         // set the bricks array to be null in the current brick position
-         Brick thisBrick = (Brick) thisObj;
+         if(thisObj.getTag().equals("Brick")) {
+		  Brick thisBrick = (Brick) thisObj;
          gameManager.setBrick(thisBrick.getRowInGrid(), thisBrick.getColInGrid(), null);
+		 }
     }
 }
