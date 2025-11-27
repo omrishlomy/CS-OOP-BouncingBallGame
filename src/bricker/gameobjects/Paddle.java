@@ -2,6 +2,7 @@ package bricker.gameobjects;
 
 import danogl.GameObject;
 import danogl.collisions.Collision;
+import danogl.components.GameObjectPhysics;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
@@ -11,6 +12,8 @@ import java.awt.event.KeyEvent;
 public class Paddle extends GameObject {
     private static final float MOVMENT_SPEED = 300;
     private final UserInputListener userInputListener;
+    private boolean touchingLeftWall = false;
+    private boolean touchingRightWall = false;
 
 
     public Paddle(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
@@ -21,10 +24,13 @@ public class Paddle extends GameObject {
     }
 
     @Override
-    public void onCollisionEnter(GameObject other, Collision collision) {
-        super.onCollisionEnter(other, collision);
-        if (other.getTag().equals("Wall")){
-            setVelocity(Vector2.ZERO);
+    public void onCollisionStay(GameObject other, Collision collision) {
+        super.onCollisionStay(other, collision);
+        if (other.getTag().equals("LeftWall")) {
+            touchingLeftWall = true;
+        }
+        else if (other.getTag().equals("RightWall")) {
+            touchingRightWall = true;
         }
     }
 
@@ -32,11 +38,13 @@ public class Paddle extends GameObject {
     public void update(float deltaTime) {
         super.update(deltaTime);
         Vector2 movementDir = Vector2.ZERO;
-        if (userInputListener.isKeyPressed(KeyEvent.VK_LEFT)){
+        if (userInputListener.isKeyPressed(KeyEvent.VK_LEFT) && !touchingLeftWall) {
             movementDir = movementDir.add(Vector2.LEFT);
+            touchingRightWall = false;
         }
-        if (userInputListener.isKeyPressed(KeyEvent.VK_RIGHT)){
+        if (userInputListener.isKeyPressed(KeyEvent.VK_RIGHT) &&  !touchingRightWall) {
             movementDir = movementDir.add(Vector2.RIGHT);
+            touchingLeftWall = false;
         }
         setVelocity(movementDir.mult(MOVMENT_SPEED));
     }
