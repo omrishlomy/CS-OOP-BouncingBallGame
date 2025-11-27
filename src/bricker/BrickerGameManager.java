@@ -2,6 +2,7 @@ package bricker;
 import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.brick_strategies.CollisionStrategyFactory;
+import bricker.brick_strategies.NonBrickStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -196,12 +197,16 @@ public class BrickerGameManager extends GameManager{
 	 gameObjects().addGameObject(firstPuck);
 	}
 	public void createExtraPaddle(){
+         // allow only 1 extra paddle
+        if (Paddle.getNumPaddles() > 1){
+            return;
+        }
 	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
 			 windowController.getWindowDimensions().y()/2);
 	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
 			 inputListener,
 			 EXTRA_PADDLE_HITS,
-			 new BasicCollisionStrategy(this));
+			 new NonBrickStrategy(this));
 	 addGameObject(extraPaddle);
 	}
 

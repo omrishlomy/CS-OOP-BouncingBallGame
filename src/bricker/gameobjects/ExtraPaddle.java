@@ -19,7 +19,8 @@ public class ExtraPaddle extends Paddle {
 
     // constructor - added a number of collision before disapearing parameter (4 in the instructions)
     public ExtraPaddle(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
-                       UserInputListener userInputListener, int numCollisionsBeforeDisapear,CollisionStrategy collisionStrategy) {
+                       UserInputListener userInputListener, int numCollisionsBeforeDisapear,
+                       CollisionStrategy collisionStrategy) {
         super(topLeftCorner, dimensions, renderable, userInputListener);
         this.numCollisionsBeforeDisappear = numCollisionsBeforeDisapear;
 		this.collisionStrategy = collisionStrategy;

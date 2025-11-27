@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 public class Paddle extends GameObject {
     private static final float MOVMENT_SPEED = 300;
+    private static int numPaddles = 0;
     private final UserInputListener userInputListener;
     private boolean touchingLeftWall = false;
     private boolean touchingRightWall = false;
@@ -21,6 +22,11 @@ public class Paddle extends GameObject {
         super(topLeftCorner, dimensions, renderable);
         this.userInputListener = userInputListener;
         this.setTag("paddle");
+        numPaddles++;
+    }
+
+    public static int getNumPaddles(){
+        return numPaddles;
     }
 
     @Override
