@@ -17,5 +17,6 @@ public class BasicCollisionStrategy implements CollisionStrategy {
         // set the bricks array to be null in the current brick position
          Brick thisBrick = (Brick) thisObj;
          gameManager.setBrick(thisBrick.getRowInGrid(), thisBrick.getColInGrid(), null);
+         gameManager.setActiveBricks(gameManager.getActiveBricks() - 1);
     }
 }
