@@ -58,16 +58,22 @@ public class BrickerGameManager extends GameManager{
 	  //Walls
 	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HIGHT),null);
 	  leftWall.setTag("LeftWall");
-	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0), new Vector2(spacing, RUNNER_HIGHT),null);
+	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0),
+              new Vector2(spacing, RUNNER_HIGHT),null);
 	  rightWall.setTag("RightWall");
 	  GameObject upperWall = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, spacing),null);
-	  upperWall.setTag("Wall");
+	  upperWall.setTag("UpperWall");
+      GameObject bottomWall = new GameObject(new Vector2(0, RUNNER_HIGHT + 100),
+              new Vector2(RUNNER_WIDTH, spacing),null);
       leftWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
+      bottomWall.setTag("BottomWall");
       rightWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
 	  gameObjects().addGameObject(leftWall);
 	  gameObjects().addGameObject(rightWall);
 	  gameObjects().addGameObject(upperWall);
+      gameObjects().addGameObject(bottomWall);
 	 }
+
 	 private void createClassicBricks(ImageReader imageReader){
 	  CollisionStrategyFactory strategyFactory = new CollisionStrategyFactory(this);
 	  for (int row = 0; row < rowsNum; row++) {
@@ -192,7 +198,8 @@ public class BrickerGameManager extends GameManager{
                 this);
     }
 	public void createPuck(Vector2 location){
-	 Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound); //50 is the ball size, need to replace with constants
+        //50 is the ball size, need to replace with constants
+         Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound, this);
 	 firstPuck.initVelocity();
 	 gameObjects().addGameObject(firstPuck);
 	}

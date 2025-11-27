@@ -32,7 +32,7 @@ class ExplosionStrategy implements CollisionStrategy {
         int rowInGrid = currBrick.getRowInGrid();
         int colInGrid = currBrick.getColInGrid();
 		//remove the current brick from game objects and from BricksGrid (to handle recursive call)
-		gameManeger.removeGameObject(thisObj,Layer.STATIC_OBJECTS);
+		gameManeger.removeGameObject(thisObj);
 		gameManeger.setBrick(rowInGrid,colInGrid,null);
         // get all neighbors
         int[][] neighbors = {{rowInGrid - 1, colInGrid}, {rowInGrid+1, colInGrid},

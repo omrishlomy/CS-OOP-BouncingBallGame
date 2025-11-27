@@ -32,13 +32,12 @@ public class CollisionStrategyFactory {
   }
   if(strategyNum==1) {
    return addPaddleStrategy;
-
   }
   if(strategyNum==2) {
    return explosionStrategy;
   }
   if(strategyNum==3) {
-   return addLifeStrategy;
+      return addLifeStrategy;
   }
    return basicCollisionStrategy;
  }
