@@ -201,6 +201,7 @@ public class BrickerGameManager extends GameManager{
         if (Paddle.getNumPaddles() > 1){
             return;
         }
+
 	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
 			 windowController.getWindowDimensions().y()/2);
 	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
@@ -209,6 +210,10 @@ public class BrickerGameManager extends GameManager{
 			 new NonBrickStrategy(this));
 	 addGameObject(extraPaddle);
 	}
+ public void createLife(Vector2 location){
+  return;
+
+ }
 
  public SoundReader getSoundReader() {
   return soundReader;
