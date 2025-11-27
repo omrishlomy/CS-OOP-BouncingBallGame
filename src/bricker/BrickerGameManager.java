@@ -2,6 +2,7 @@ package bricker;
 import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.brick_strategies.CollisionStrategyFactory;
+import bricker.brick_strategies.NonBrickStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
@@ -13,15 +14,16 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Border;
 import danogl.util.Vector2;
 
+import java.awt.event.KeyEvent;
+
 
 public class BrickerGameManager extends GameManager{
-     private static final float BALL_VELOCITY=250;
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
-	  private static final float LIFE_VELOCITY=100;
 	  private static final int EXTRA_PADDLE_HITS=4;
-	  private static final Vector2 BALL_SHAPE = new Vector2(50,50);
-	  private static final Vector2 LIFE_SIZE=new Vector2(30,30);
+      private static final int MAX_NUM_LIVES = 3;
+      private static final String LOSE_STRING = "You lose! Play again?";
+    private static final String WIN_STRING = "You won! Play again?";
  	 private static final int marginX = 10;
 	 private static final int marginY = 10;
 	 private static final int spacing = 5;
@@ -29,9 +31,10 @@ public class BrickerGameManager extends GameManager{
 	 private static float brickWidth;
 	 private float RUNNER_HIGHT = 500;
 	 private float RUNNER_WIDTH = 700;
-	 private int colsNum = 8;
-	 private int rowsNum = 7;
+	 private int colsNum = 1;
+	 private int rowsNum = 1;
 	 private int paddlesNum = 1;
+     private boolean ballOut = false;
 	 private ImageReader imageReader;
 	 private SoundReader soundReader;
 	 private WindowController windowController;
@@ -45,6 +48,9 @@ public class BrickerGameManager extends GameManager{
 	 private Sound collisionSound;
 	 private Sound explosionSound;
 	 private Brick[][] bricksGrid;
+     private Ball ball;
+     private LifeCounters lifeCounters;
+     private int activeBricks = 0;
 
 
 
@@ -79,9 +85,9 @@ public class BrickerGameManager extends GameManager{
 				row,
 				col
 		);
-		brick.setTag("Brick");
 		bricksGrid[row][col] = brick;
-		gameObjects().addGameObject(brick,Layer.STATIC_OBJECTS);
+		gameObjects().addGameObject(brick);
+        activeBricks++;
 	   }
 	  }
 
@@ -91,10 +97,10 @@ public class BrickerGameManager extends GameManager{
 	  gameObjects().addGameObject(background,Layer.BACKGROUND);
 	 }
 	 private void createBall(){
-        GameObject ball = new Ball(Vector2.ZERO, BALL_SHAPE, ballImage, collisionSound);
-        ball.setVelocity(Vector2.DOWN.mult(BALL_VELOCITY));
+        Ball ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
         ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
-        gameObjects().addGameObject(ball,Layer.DEFAULT);
+        gameObjects().addGameObject(ball);
+        this.ball = ball;
 
 	 }
 	 private void createPaddle(){
@@ -106,8 +112,7 @@ public class BrickerGameManager extends GameManager{
         userPaddle.setCenter(
                 new Vector2(windowController.getWindowDimensions().x()/2,
                         (int)windowController.getWindowDimensions().y()-30));
-		userPaddle.setTag("Paddle");
-        gameObjects().addGameObject(userPaddle,Layer.STATIC_OBJECTS);
+        gameObjects().addGameObject(userPaddle);
 	 }
      public BrickerGameManager(String windowTitle, Vector2 windowDimensions,int numCols,int numRows) {
         super(windowTitle, windowDimensions);
@@ -118,6 +123,42 @@ public class BrickerGameManager extends GameManager{
 	 	brickWidth = (RUNNER_WIDTH - 2 * marginX - (colsNum - 1) * spacing) / colsNum;
 		bricksGrid = new Brick[numRows][numCols];
      }
+
+     public void endGame(boolean lose){
+         String toPrint = LOSE_STRING;
+         if(!lose){
+             toPrint =WIN_STRING;
+         }
+         if (windowController.openYesNoDialog(toPrint)){
+             windowController.resetGame();
+             return;
+         }
+         windowController.closeWindow();
+     }
+
+    @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+        // check for W press for instant win
+        if (inputListener.isKeyPressed(KeyEvent.VK_W) || activeBricks == 0) {
+            boolean lose = false;
+            endGame(lose);
+        }
+        double ballHeight = ball.getCenter().y();
+        // make sure we only remove one life per strike, and not per frame in which the ball is out.
+        if (ballHeight > RUNNER_HIGHT && !ballOut) {
+            ballOut = true;
+            lifeCounters.loseLife();
+            // ball back in center and start randomly
+            ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
+            ball.initVelocity();
+        }
+        if (ball.getCenter().y() <= RUNNER_HIGHT) {
+            ballOut = false;
+        }
+
+        // check for win
+    }
 
     // this is just to check the code NEED TO CHANGE !!!!!!
     @Override
@@ -146,27 +187,27 @@ public class BrickerGameManager extends GameManager{
 		createWalls();
 		//Background
 	 	createBackground(imageReader);
-
+         // life counters
+        this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO, this.lifeImage, MAX_NUM_LIVES,
+                this);
     }
 	public void createPuck(Vector2 location){
 	 Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound); //50 is the ball size, need to replace with constants
 	 firstPuck.initVelocity();
-	 gameObjects().addGameObject(firstPuck,Layer.DEFAULT);
+	 gameObjects().addGameObject(firstPuck);
 	}
 	public void createExtraPaddle(){
+         // allow only 1 extra paddle
+        if (Paddle.getNumPaddles() > 1){
+            return;
+        }
 	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
 			 windowController.getWindowDimensions().y()/2);
 	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
 			 inputListener,
 			 EXTRA_PADDLE_HITS,
-			 new BasicCollisionStrategy(this));
-	 extraPaddle.setTag("Paddle");
-	 gameObjects().addGameObject(extraPaddle,Layer.STATIC_OBJECTS);
-	}
-	public void createLife(Vector2 brickCenter){
-	  AddLifeHeart life = new AddLifeHeart(brickCenter,LIFE_SIZE,lifeImage,new BasicCollisionStrategy(this));
-	  life.setVelocity(Vector2.DOWN.mult(LIFE_VELOCITY));
-	  gameObjects().addGameObject(life,Layer.DEFAULT);
+			 new NonBrickStrategy(this));
+	 addGameObject(extraPaddle);
 	}
 
  public SoundReader getSoundReader() {
@@ -203,9 +244,16 @@ public class BrickerGameManager extends GameManager{
  public void addGameObject(GameObject gameObject){
     gameObjects().addGameObject(gameObject);
  }
- public void removeGameObject(GameObject gameObject,int layer){
-	  gameObjects().removeGameObject(gameObject,layer);
+
+    public void addGameObject(GameObject gameObject, int layer){
+        gameObjects().addGameObject(gameObject, layer);
+    }
+ public void removeGameObject(GameObject gameObject){
+	  gameObjects().removeGameObject(gameObject);
  }
+    public void removeGameObject(GameObject gameObject, int layer){
+        gameObjects().removeGameObject(gameObject, layer);
+    }
     public static void main(String[] args) {
 	  if (args.length>=2){
 	   int rows = Integer.parseInt(args[0]);
@@ -218,4 +266,12 @@ public class BrickerGameManager extends GameManager{
 	   gameManager.run();
 	  }
       }
+
+    public int getActiveBricks() {
+        return activeBricks;
+    }
+
+    public void setActiveBricks(int activeBricks) {
+        this.activeBricks = activeBricks;
+    }
 }
