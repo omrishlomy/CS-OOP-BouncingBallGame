@@ -7,8 +7,10 @@ import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
+import danogl.components.GameObjectPhysics;
 import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
+import danogl.util.Border;
 import danogl.util.Vector2;
 
 
@@ -46,11 +48,13 @@ public class BrickerGameManager extends GameManager{
 	 private void createWalls(){
 	  //Walls
 	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HIGHT),null);
-	  leftWall.setTag("Wall");
+	  leftWall.setTag("LeftWall");
 	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0), new Vector2(spacing, RUNNER_HIGHT),null);
-	  rightWall.setTag("Wall");
+	  rightWall.setTag("RightWall");
 	  GameObject upperWall = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, spacing),null);
 	  upperWall.setTag("Wall");
+      leftWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
+      rightWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
 	  gameObjects().addGameObject(leftWall);
 	  gameObjects().addGameObject(rightWall);
 	  gameObjects().addGameObject(upperWall);
@@ -120,7 +124,8 @@ public class BrickerGameManager extends GameManager{
 		this.soundReader = soundReader;
 		this.ballImage = imageReader.readImage("assets/ball.png", true);
 	    this.brickImage = imageReader.readImage("assets/brick.png", true);
-	    this.backgroundImage = imageReader.readImage("assets/DARK_BG2_small.jpeg", true);
+	    this.backgroundImage = imageReader.readImage("assets/DARK_BG2_small.jpeg",
+                false);
 		this.paddleImage = imageReader.readImage("assets/paddle.png", true);
 		this.lifeImage = imageReader.readImage("assets/heart.png", true);
 		this.puckImage = imageReader.readImage("assets/mockBall.png", true);
