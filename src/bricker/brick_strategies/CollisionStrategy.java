@@ -8,4 +8,7 @@ import danogl.collisions.Collision;
  */
 public interface CollisionStrategy {
     public void onCollision(GameObject thisObj, GameObject otherObj);
+	default int countDecorators(){
+	 return 0;
+	}
 }

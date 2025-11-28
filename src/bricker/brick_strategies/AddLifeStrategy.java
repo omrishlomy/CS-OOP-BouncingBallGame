@@ -12,14 +12,15 @@ import danogl.util.Vector2;
  * @author Lihi
  * @see bricker.brick_strategies.CollisionStrategy
  */
-public class AddLifeStrategy implements CollisionStrategy{
- private BrickerGameManager gameManager;
+public class AddLifeStrategy extends CollisionStrategyDecorator{
+ private final BrickerGameManager gameManager;
 
     /**
      * Constructor
      * @param gameManager- bricker game manager
      */
- public AddLifeStrategy(BrickerGameManager gameManager){
+ public AddLifeStrategy(BrickerGameManager gameManager,CollisionStrategy decorated){
+  super(decorated);
   this.gameManager = gameManager;
  }
 
@@ -31,8 +32,8 @@ public class AddLifeStrategy implements CollisionStrategy{
      @Override
      public void onCollision(GameObject thisObj, GameObject otherObj) {
         // create a life and remove th brick
+	    super.onCollision(thisObj,otherObj);
          Vector2 center = thisObj.getCenter();
           gameManager.createLife(center);
-          gameManager.removeGameObject(thisObj);
      }
 }

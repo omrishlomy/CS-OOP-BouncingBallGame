@@ -1,22 +1,21 @@
 package bricker;
-import bricker.brick_strategies.BasicCollisionStrategy;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.brick_strategies.CollisionStrategyFactory;
 import bricker.brick_strategies.NonBrickStrategy;
 import bricker.gameobjects.*;
 import danogl.GameManager;
 import danogl.GameObject;
-import danogl.collisions.GameObjectCollection;
 import danogl.collisions.Layer;
 import danogl.components.GameObjectPhysics;
 import danogl.gui.*;
 import danogl.gui.rendering.Renderable;
-import danogl.util.Border;
 import danogl.util.Vector2;
 
 import java.awt.event.KeyEvent;
 
-
+/**
+ * class for the Bricker game manager
+ */
 public class BrickerGameManager extends GameManager{
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
@@ -31,11 +30,10 @@ public class BrickerGameManager extends GameManager{
 	 private static final int spacing = 5;
 	 private static final int brickHeight = 15;
 	 private static float brickWidth;
-	 private float RUNNER_HIGHT = 500;
+	 private float RUNNER_HEIGHT = 500;
 	 private float RUNNER_WIDTH = 700;
 	 private int colsNum = 1;
 	 private int rowsNum = 1;
-	 private int paddlesNum = 1;
      private boolean ballOut = false;
 	 private ImageReader imageReader;
 	 private SoundReader soundReader;
@@ -55,17 +53,16 @@ public class BrickerGameManager extends GameManager{
      private int activeBricks = 0;
 
 
-
 	 private void createWalls(){
 	  //Walls
-	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HIGHT),null);
+	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HEIGHT),null);
 	  leftWall.setTag("LeftWall");
 	  GameObject rightWall = new GameObject(new Vector2(RUNNER_WIDTH,0),
-              new Vector2(spacing, RUNNER_HIGHT),null);
+              new Vector2(spacing, RUNNER_HEIGHT),null);
 	  rightWall.setTag("RightWall");
 	  GameObject upperWall = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, spacing),null);
 	  upperWall.setTag("UpperWall");
-      GameObject bottomWall = new GameObject(new Vector2(0, RUNNER_HIGHT + 100),
+      GameObject bottomWall = new GameObject(new Vector2(0, RUNNER_HEIGHT + 100),
               new Vector2(RUNNER_WIDTH, spacing),null);
       leftWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
       bottomWall.setTag("BottomWall");
@@ -75,13 +72,12 @@ public class BrickerGameManager extends GameManager{
 	  gameObjects().addGameObject(upperWall);
       gameObjects().addGameObject(bottomWall);
 	 }
-
-	 private void createClassicBricks(ImageReader imageReader){
+	 private void createClassicBricks(){
 	  CollisionStrategyFactory strategyFactory = new CollisionStrategyFactory(this);
 	  for (int row = 0; row < rowsNum; row++) {
 	   for (int col = 0; col < colsNum; col++) {
 
-	  CollisionStrategy strategy = strategyFactory.createStrategyFactory();
+	  CollisionStrategy strategy = strategyFactory.createStrategy();
 		float x = marginX + col * (brickWidth + spacing);
 		float y = marginY + row * (brickHeight + spacing);
 
@@ -100,8 +96,8 @@ public class BrickerGameManager extends GameManager{
 	  }
 
 	 }
-	 private void createBackground(ImageReader imageReader){
-	  GameObject background = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, RUNNER_HIGHT), backgroundImage);
+	 private void createBackground(){
+	  GameObject background = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, RUNNER_HEIGHT), backgroundImage);
 	  gameObjects().addGameObject(background,Layer.BACKGROUND);
 	 }
 	 private void createBall(){
@@ -122,9 +118,17 @@ public class BrickerGameManager extends GameManager{
                         (int)windowController.getWindowDimensions().y()-30));
         gameObjects().addGameObject(userPaddle);
 	 }
+
+ /**
+  * Constructor
+  * @param windowTitle
+  * @param windowDimensions
+  * @param numCols
+  * @param numRows
+  */
      public BrickerGameManager(String windowTitle, Vector2 windowDimensions,int numCols,int numRows) {
         super(windowTitle, windowDimensions);
-		RUNNER_HIGHT = windowDimensions.y();
+		RUNNER_HEIGHT = windowDimensions.y();
 		RUNNER_WIDTH = windowDimensions.x();
 		this.colsNum = numCols;
 		this.rowsNum = numRows;
@@ -132,6 +136,10 @@ public class BrickerGameManager extends GameManager{
 		bricksGrid = new Brick[numRows][numCols];
      }
 
+ /**
+  * method called when the game ends
+  * @param lose
+  */
      public void endGame(boolean lose){
          String toPrint = LOSE_STRING;
          if(!lose){
@@ -159,19 +167,25 @@ public class BrickerGameManager extends GameManager{
         // if the ball fell down, remove a life
         double ballHeight = ball.getCenter().y();
         // make sure we only remove one life per strike, and not per frame in which the ball is out.
-        if (ballHeight > RUNNER_HIGHT && !ballOut) {
+        if (ballHeight > RUNNER_HEIGHT && !ballOut) {
             ballOut = true;
             lifeCounters.loseLife();
             // set ball back in center and start randomly
             ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
             ball.initVelocity();
         }
-        if (ball.getCenter().y() <= RUNNER_HIGHT) {
+        if (ball.getCenter().y() <= RUNNER_HEIGHT) {
             ballOut = false;
         }
     }
 
-    // this is just to check the code NEED TO CHANGE !!!!!!
+ /**
+  * Game initiallizer, init the game manager fields and create the objects
+  * @param imageReader
+  * @param soundReader
+  * @param inputListener
+  * @param windowController
+  */
     @Override
     public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
@@ -193,11 +207,11 @@ public class BrickerGameManager extends GameManager{
         // paddle
 		createPaddle();
 		//Bricks
-	 	createClassicBricks(imageReader);
+	 	createClassicBricks();
 		//Walls
 		createWalls();
 		//Background
-	 	createBackground(imageReader);
+	 	createBackground();
          // life counters
         this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO, this.lifeImage, MAX_NUM_LIVES,
                 this);
@@ -260,10 +274,6 @@ public class BrickerGameManager extends GameManager{
      public WindowController getWindowController() {
       return windowController;
      }
-
- public GameObjectCollection getGameObjectCollection(GameObjectCollection gameObjectCollection) {
-  return gameObjectCollection;
- }
 
     /**
      * getter for input listener

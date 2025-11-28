@@ -1,24 +1,32 @@
 package bricker.brick_strategies;
 import bricker.BrickerGameManager;
-import bricker.gameobjects.Puck;
-import danogl.GameManager;
 import danogl.GameObject;
-import danogl.collisions.GameObjectCollection;
-import danogl.collisions.Layer;
-import danogl.gui.ImageReader;
-import danogl.gui.SoundReader;
-import danogl.gui.rendering.Renderable;
-import danogl.util.Vector2;
 import danogl.gui.*;
 
-public class PuckStrategy implements  CollisionStrategy {
+/**
+ * class for adding 2 puck balls strategy
+ */
+public class PuckStrategy extends  CollisionStrategyDecorator {
  private BrickerGameManager gameManager;
- public PuckStrategy(BrickerGameManager gameManager) {
+
+ /**
+  * Constructor
+  * @param gameManager
+  * @param decorated
+  */
+ public PuckStrategy(BrickerGameManager gameManager,CollisionStrategy decorated) {
+  super(decorated);
 	this.gameManager = gameManager;
  }
+
+ /**
+  * onCollision method, calls the basic method and than add 2 puck balls to the game
+  * @param thisObj
+  * @param otherObj
+  */
  @Override
  public void onCollision(GameObject thisObj, GameObject otherObj) {
-  gameManager.removeGameObject(thisObj);
+  super.onCollision(thisObj, otherObj);
   gameManager.createPuck(thisObj.getCenter());
   gameManager.createPuck(thisObj.getCenter());
  }

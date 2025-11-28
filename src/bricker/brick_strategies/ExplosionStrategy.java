@@ -1,30 +1,36 @@
 package bricker.brick_strategies;
 
 import bricker.gameobjects.Brick;
-import danogl.GameManager;
 import danogl.GameObject;
-import danogl.collisions.AABB.AABBCollider;
-import danogl.collisions.Collision;
-import danogl.collisions.GameObjectCollection;
-import danogl.collisions.Layer;
 import danogl.gui.Sound;
-import danogl.gui.rendering.Renderable;
 import bricker.BrickerGameManager;
 
-// package protected - not part of API
-class ExplosionStrategy implements CollisionStrategy {
-    private final BrickerGameManager gameManeger;
+/**
+ * class impleneting the explosion strategy
+ */
+class ExplosionStrategy extends CollisionStrategyDecorator {
+    private final BrickerGameManager gameManager;
 
 
-    // constructor receives explosion sound, the game objects and a list of the bricks
-    public ExplosionStrategy(BrickerGameManager gameManeger) {
-        this.gameManeger = gameManeger;
+ /**
+  * Constructor
+  * @param gameManeger
+  * @param decorated
+  */
+ public ExplosionStrategy(BrickerGameManager gameManeger,CollisionStrategy decorated) {
+	 super(decorated);
+        this.gameManager = gameManeger;
     }
 
+ /**
+  * on collision method - deletes the current brick and call the onCollision method of the 4 nearby bricks
+  * @param thisObj
+  * @param otherObj
+  */
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
         // play the sound
-        Sound explosionSound = gameManeger.getExplosionSound();
+        Sound explosionSound = gameManager.getExplosionSound();
         explosionSound.play();
 
         // explode neighbors
@@ -32,13 +38,12 @@ class ExplosionStrategy implements CollisionStrategy {
         int rowInGrid = currBrick.getRowInGrid();
         int colInGrid = currBrick.getColInGrid();
 		//remove the current brick from game objects and from BricksGrid (to handle recursive call)
-		gameManeger.removeGameObject(thisObj);
-		gameManeger.setBrick(rowInGrid,colInGrid,null);
+	 	super.onCollision(thisObj, otherObj);
         // get all neighbors
         int[][] neighbors = {{rowInGrid - 1, colInGrid}, {rowInGrid+1, colInGrid},
                 {rowInGrid, colInGrid-1}, {rowInGrid,  colInGrid+1}};
         for (int[] neighbor : neighbors) {
-            Brick neighborBrick = gameManeger.getBrick(neighbor[0], neighbor[1]);
+            Brick neighborBrick = gameManager.getBrick(neighbor[0], neighbor[1]);
             if (neighborBrick != null){
 			 neighborBrick.explode(thisObj);
 

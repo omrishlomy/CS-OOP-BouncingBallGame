@@ -8,7 +8,9 @@ import danogl.gui.UserInputListener;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
-// package private - not part of the API : HAVE TO BE PUBLIC FOR BEING CALLED FROM THE STRATEGY PACKAGE
+/**
+ * Extra paddle class, supporting the add Paddle strategy
+ */
 public class ExtraPaddle extends Paddle {
  	private static int extraPaddleNum=0;
     int numCollisionsBeforeDisappear;
@@ -17,7 +19,15 @@ public class ExtraPaddle extends Paddle {
     // update it.
     boolean active = true;
 
-    // constructor - added a number of collision before disapearing parameter (4 in the instructions)
+ /**
+  * constructor - added a number of collision before disappearing parameter (4 in the instructions)
+  * @param topLeftCorner - location in  pixels of the extra Paddle
+  * @param dimensions - Vector2 dimensions of the Paddle
+  * @param renderable - Paddle image to rend
+  * @param userInputListener - input listener for moving the Paddle
+  * @param numCollisionsBeforeDisapear - number of hits the Paddle will recencies before disappearing
+  * @param collisionStrategy - collision strategy to apply (Basic in default)
+  */
     public ExtraPaddle(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
                        UserInputListener userInputListener, int numCollisionsBeforeDisapear,
                        CollisionStrategy collisionStrategy) {
@@ -27,6 +37,11 @@ public class ExtraPaddle extends Paddle {
 		extraPaddleNum++;
     }
 
+ /**
+  * collision method checks if the Paddle reached to the maximum hits and call the Paddle collision strategy
+  * @param other
+  * @param collision
+  */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         this.numCollisionsBeforeDisappear--;
@@ -36,6 +51,11 @@ public class ExtraPaddle extends Paddle {
         }
         super.onCollisionEnter(other, collision);
     }
+
+ /**
+  * update method checks if the Padlle is not active, than remove it form the game
+  * @param deltaTime - time for updating the frame
+  */
 	public void update(float deltaTime)
   {
     super.update(deltaTime);
@@ -44,9 +64,11 @@ public class ExtraPaddle extends Paddle {
 	 collisionStrategy.onCollision(this,this);
 	}
   }
-    public boolean isActive() {
-        return active;
-    }
+
+ /**
+  * return thee number of Extra Paddles in the game
+  * @return
+  */
 	public static int getPaddlesNum(){
 	 return extraPaddleNum;
 	}
