@@ -21,7 +21,9 @@ public class BrickerGameManager extends GameManager{
 	 private static final float PADDLE_WIDTH=100;
  	 private static final float PADDLE_HEIGHT=10;
 	  private static final int EXTRA_PADDLE_HITS=4;
+      private static final int ALLOWED_NUM_EXTRA_PADDLES=1;
       private static final int MAX_NUM_LIVES = 3;
+      private static final Vector2 HEART_DIMENSIONS=new Vector2(30, 30);
       private static final String LOSE_STRING = "You lose! Play again?";
     private static final String WIN_STRING = "You won! Play again?";
  	 private static final int marginX = 10;
@@ -142,28 +144,31 @@ public class BrickerGameManager extends GameManager{
          windowController.closeWindow();
      }
 
+    /**
+     * updates the internal state of the game each frame. check for wins and losses.
+     * @param deltaTime- time for updating a frame.
+     */
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        // check for W press for instant win
+        // check for W press for instant win, or no more active bricks so true win
         if (inputListener.isKeyPressed(KeyEvent.VK_W) || activeBricks == 0) {
             boolean lose = false;
             endGame(lose);
         }
+        // if the ball fell down, remove a life
         double ballHeight = ball.getCenter().y();
         // make sure we only remove one life per strike, and not per frame in which the ball is out.
         if (ballHeight > RUNNER_HIGHT && !ballOut) {
             ballOut = true;
             lifeCounters.loseLife();
-            // ball back in center and start randomly
+            // set ball back in center and start randomly
             ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
             ball.initVelocity();
         }
         if (ball.getCenter().y() <= RUNNER_HIGHT) {
             ballOut = false;
         }
-
-        // check for win
     }
 
     // this is just to check the code NEED TO CHANGE !!!!!!
@@ -203,12 +208,16 @@ public class BrickerGameManager extends GameManager{
 	 firstPuck.initVelocity();
 	 gameObjects().addGameObject(firstPuck);
 	}
+
+    /**
+     * adds extra paddle to the game
+     */
 	public void createExtraPaddle(){
-         // allow only 1 extra paddle
-        if (Paddle.getNumPaddles() > 1){
+         // if we already at the allowed number of paddles, do nothing
+        if (ExtraPaddle.getPaddlesNum() == ALLOWED_NUM_EXTRA_PADDLES){
             return;
         }
-
+    // else, create an extra paddle and add to play.
 	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
 			 windowController.getWindowDimensions().y()/2);
 	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
@@ -217,55 +226,122 @@ public class BrickerGameManager extends GameManager{
 			 new NonBrickStrategy(this));
 	 addGameObject(extraPaddle);
 	}
- public void createLife(Vector2 location){
-  return;
 
- }
+    /**
+     * add a falling heart that gives the use a life
+     * @param location start position for the falling heart/
+     */
+     public void createLife(Vector2 location){
+      GameObject fallingHeart = new AddLifeHeart(location, HEART_DIMENSIONS, lifeImage,
+              new NonBrickStrategy(this), this); // creates the object
+      addGameObject(fallingHeart); // adds to game
+     }
 
- public SoundReader getSoundReader() {
-  return soundReader;
- }
+    /**
+     * getter for sound reader
+     * @return sound reader
+     */
+     public SoundReader getSoundReader() {
+      return soundReader;
+     }
 
- public ImageReader getImageReader() {
-  return imageReader;
- }
+    /**
+     * getter for image reader
+     * @return getter for image reader
+     */
+     public ImageReader getImageReader() {
+      return imageReader;
+     }
 
- public WindowController getWindowController() {
-  return windowController;
- }
+    /**
+     * getter for window controller
+     * @return window controller
+     */
+     public WindowController getWindowController() {
+      return windowController;
+     }
 
  public GameObjectCollection getGameObjectCollection(GameObjectCollection gameObjectCollection) {
   return gameObjectCollection;
  }
 
- public UserInputListener getUserInputListener() {
-  return inputListener;
- }
- public Sound getExplosionSound() {
-  return explosionSound;
- }
- public Brick getBrick(int row,int col){
-	  if(row<0 || row>=rowsNum || col<0 || col>= colsNum){
-	   return null;
-	  }
-	  return bricksGrid[row][col];
- }
- public void setBrick(int row,int col,Brick brick){
-	  this.bricksGrid[row][col]= brick;
- }
- public void addGameObject(GameObject gameObject){
-    gameObjects().addGameObject(gameObject);
- }
+    /**
+     * getter for input listener
+     * @return input listener
+     */
+     public UserInputListener getUserInputListener() {
+      return inputListener;
+     }
 
+    /**
+     * getter for explosion sound
+     * @return explosion sound
+     */
+     public Sound getExplosionSound() {
+      return explosionSound;
+     }
+
+    /**
+     * getter for bricks from the grid
+     * @param row- row in the grid of the wanted brick
+     * @param col- col in the grid of the wanted brick
+     * @return object in the grid in position [row,col]
+     */
+     public Brick getBrick(int row,int col){
+          if(row<0 || row>=rowsNum || col<0 || col>= colsNum){
+           return null;
+          }
+          return bricksGrid[row][col];
+     }
+
+    /**
+     * set a brick
+     * @param row - row in the grid of the wanted brick
+     * @param col- col in the grid of the wanted brick
+     * @param brick- the brick we want to insert in position [row, col] in the grid
+     */
+     public void setBrick(int row,int col,Brick brick){
+              this.bricksGrid[row][col]= brick;
+         }
+
+    /**
+     * adds a game object to the game
+     * @param gameObject- object to add
+     */
+     public void addGameObject(GameObject gameObject){
+        gameObjects().addGameObject(gameObject);
+     }
+
+    /**
+     * adds a game object to the game
+     * @param gameObject- object to add
+     * @param layer- layer to add to.
+     */
     public void addGameObject(GameObject gameObject, int layer){
         gameObjects().addGameObject(gameObject, layer);
     }
- public void removeGameObject(GameObject gameObject){
-	  gameObjects().removeGameObject(gameObject);
- }
+
+    /**
+     * removes an object from the game
+     * @param gameObject-the object to remove
+     */
+     public void removeGameObject(GameObject gameObject){
+          gameObjects().removeGameObject(gameObject);
+     }
+
+    /**
+     * removes an object from the game
+     * @param gameObject-the object to remove
+     * @param layer- the layer to remove from.
+     */
     public void removeGameObject(GameObject gameObject, int layer){
         gameObjects().removeGameObject(gameObject, layer);
     }
+
+    /**
+     * main function, start running the game
+     * @param args - command line given arguments
+     */
     public static void main(String[] args) {
 	  if (args.length>=2){
 	   int rows = Integer.parseInt(args[0]);
@@ -279,11 +355,26 @@ public class BrickerGameManager extends GameManager{
 	  }
       }
 
+    /**
+     * getter for active bricks
+     * @return active bricks
+     */
     public int getActiveBricks() {
         return activeBricks;
     }
 
+    /**
+     * setter for active bricks
+     * @param activeBricks- number of active bricks
+     */
     public void setActiveBricks(int activeBricks) {
         this.activeBricks = activeBricks;
+    }
+
+    /**
+     * adds a life to the user.
+     */
+    public void addLife(){
+         lifeCounters.addLife();
     }
 }
