@@ -3,7 +3,7 @@ package bricker.brick_strategies;
 import bricker.gameobjects.Brick;
 import danogl.GameObject;
 import danogl.gui.Sound;
-import bricker.BrickerGameManager;
+import bricker.main.BrickerGameManager;
 
 /**
  * class impleneting the explosion strategy

@@ -1,4 +1,4 @@
-package bricker;
+package bricker.main;
 import bricker.brick_strategies.CollisionStrategy;
 import bricker.brick_strategies.CollisionStrategyFactory;
 import bricker.brick_strategies.NonBrickStrategy;
@@ -21,7 +21,8 @@ public class BrickerGameManager extends GameManager{
  	 private static final float PADDLE_HEIGHT=10;
 	  private static final int EXTRA_PADDLE_HITS=4;
       private static final int ALLOWED_NUM_EXTRA_PADDLES=1;
-      private static final int MAX_NUM_LIVES = 3;
+      private static final int MAX_NUM_LIVES = 4;
+	  private static final int INIT_NUM_LIVES = 3;
       private static final Vector2 HEART_DIMENSIONS=new Vector2(30, 30);
       private static final String LOSE_STRING = "You lose! Play again?";
     private static final String WIN_STRING = "You won! Play again?";
@@ -67,10 +68,10 @@ public class BrickerGameManager extends GameManager{
       leftWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
       bottomWall.setTag("BottomWall");
       rightWall.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
-	  gameObjects().addGameObject(leftWall);
-	  gameObjects().addGameObject(rightWall);
-	  gameObjects().addGameObject(upperWall);
-      gameObjects().addGameObject(bottomWall);
+	  gameObjects().addGameObject(leftWall,Layer.STATIC_OBJECTS);
+	  gameObjects().addGameObject(rightWall,Layer.STATIC_OBJECTS);
+	  gameObjects().addGameObject(upperWall,Layer.STATIC_OBJECTS);
+      gameObjects().addGameObject(bottomWall,Layer.STATIC_OBJECTS);
 	 }
 	 private void createClassicBricks(){
 	  CollisionStrategyFactory strategyFactory = new CollisionStrategyFactory(this);
@@ -213,7 +214,7 @@ public class BrickerGameManager extends GameManager{
 		//Background
 	 	createBackground();
          // life counters
-        this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO, this.lifeImage, MAX_NUM_LIVES,
+        this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO, this.lifeImage,INIT_NUM_LIVES, MAX_NUM_LIVES,
                 this);
     }
 	public void createPuck(Vector2 location){

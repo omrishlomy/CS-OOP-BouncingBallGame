@@ -1,6 +1,6 @@
 package bricker.gameobjects;
 
-import bricker.BrickerGameManager;
+import bricker.main.BrickerGameManager;
 import danogl.GameManager;
 import danogl.GameObject;
 import danogl.collisions.Collision;
@@ -39,21 +39,24 @@ public class LifeCounters extends GameObject {
      * @param numLives- number of maximum lives aa user can have.
      * @param gameManager - game manager
      */
-    public LifeCounters(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, int numLives,
+    public LifeCounters(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, int numLives,int maxNumLives,
                         BrickerGameManager gameManager) {
         super(topLeftCorner, dimensions, renderable);
         this.numLives = numLives;
-        this.maxLives = numLives;
+        this.maxLives = maxNumLives;
         this.gameManager = gameManager;
-        this.heartIcons = new GameObject[numLives];
+        this.heartIcons = new GameObject[maxNumLives];
 
         // build hearts and add to game and to array
-        for (int i = 0; i < numLives; i++) {
-            GameObject heart = new GameObject(topLeftCorner.add(Vector2.RIGHT.mult(i * SPACING)),
-                    HEART_DIMENSIONS, renderable);
-            heartIcons[i] = heart;
-            gameManager.addGameObject(heart, Layer.UI);
-        }
+        for (int startLives = 0; startLives < maxLives; startLives++) {
+		 GameObject heart = new GameObject(topLeftCorner.add(Vector2.RIGHT.mult(startLives * SPACING)),
+				 HEART_DIMENSIONS, renderable);
+		 heartIcons[startLives] = heart;
+		}
+		for(int optionalLives=0;optionalLives<maxLives;optionalLives++) {
+            gameManager.addGameObject(heartIcons[optionalLives], Layer.UI);
+		}
+
         // initialize text
         textRenderable = new TextRenderable("" + numLives);
         textRenderable.setColor(Color.GREEN);
