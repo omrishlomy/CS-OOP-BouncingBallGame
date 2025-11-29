@@ -36,9 +36,15 @@ public class AddLifeHeart extends GameObject {
         this.setVelocity(Vector2.DOWN.mult(HEART_SPEED));
     }
 
+    /**
+     * determines what object will cause on collision to be called
+     * @param other - object collided with
+     * @return boolean indicating id we should collide with it.
+     */
     @Override
     public boolean shouldCollideWith(GameObject other) {
         String tag = other.getTag();
+        // check if the tag is on the should collide with list
         for (String s : SHOULD_COLLIDE_WITH) {
             if (tag.equals(s)) {
                 return true;
