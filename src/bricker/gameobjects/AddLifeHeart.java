@@ -15,6 +15,7 @@ import danogl.util.Vector2;
  */
 public class AddLifeHeart extends GameObject {
     private static final int HEART_SPEED = 150;
+    private static final String[] SHOULD_COLLIDE_WITH = {"Paddle", "BottomWall"};
     private final BrickerGameManager gameManager;
     private final CollisionStrategy  collisionStrategy;
 
@@ -33,6 +34,17 @@ public class AddLifeHeart extends GameObject {
         this.gameManager = gameManager;
         // make the heart fall down
         this.setVelocity(Vector2.DOWN.mult(HEART_SPEED));
+    }
+
+    @Override
+    public boolean shouldCollideWith(GameObject other) {
+        String tag = other.getTag();
+        for (String s : SHOULD_COLLIDE_WITH) {
+            if (tag.equals(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
