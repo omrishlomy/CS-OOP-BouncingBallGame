@@ -39,7 +39,8 @@ public class LifeCounters extends GameObject {
      * @param numLives- number of maximum lives aa user can have.
      * @param gameManager - game manager
      */
-    public LifeCounters(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, int numLives,int maxNumLives,
+    public LifeCounters(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable,
+						int numLives,int maxNumLives,
                         BrickerGameManager gameManager) {
         super(topLeftCorner, dimensions, renderable);
         this.numLives = numLives;

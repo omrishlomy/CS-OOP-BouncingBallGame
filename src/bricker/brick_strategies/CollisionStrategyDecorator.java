@@ -3,12 +3,14 @@ package bricker.brick_strategies;
 import danogl.GameObject;
 
 /**
- * class decorator for strategies, implements the Collision strategy interface
+ * Abstract class decorator for strategies, implements the Collision strategy interface
  * @author Omri
  * @see bricker.brick_strategies.CollisionStrategy
  */
 public abstract class CollisionStrategyDecorator implements CollisionStrategy {
-
+ /**
+  * the Collision strategy field
+  */
  protected final CollisionStrategy decorated;
 
  /**

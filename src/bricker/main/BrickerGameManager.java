@@ -111,7 +111,8 @@ public class BrickerGameManager extends GameManager{
      * creates the background
      */
     private void createBackground(){
-	  GameObject background = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, RUNNER_HEIGHT), backgroundImage);
+	  GameObject background = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH,
+			  RUNNER_HEIGHT), backgroundImage);
 	  gameObjects().addGameObject(background,Layer.BACKGROUND);
 	 }
 
@@ -148,7 +149,8 @@ public class BrickerGameManager extends GameManager{
   * @param numCols
   * @param numRows
   */
-     public BrickerGameManager(String windowTitle, Vector2 windowDimensions,int numCols,int numRows) {
+     public BrickerGameManager(String windowTitle, Vector2 windowDimensions,
+							   int numCols,int numRows) {
         super(windowTitle, windowDimensions);
 		RUNNER_HEIGHT = windowDimensions.y();
 		RUNNER_WIDTH = windowDimensions.x();
@@ -209,7 +211,8 @@ public class BrickerGameManager extends GameManager{
   * @param windowController
   */
     @Override
-    public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
+    public void initializeGame(ImageReader imageReader, SoundReader soundReader,
+							   UserInputListener inputListener, WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
 		this.inputListener = inputListener;
 		this.windowController = windowController;
@@ -235,7 +238,8 @@ public class BrickerGameManager extends GameManager{
 		//Background
 	 	createBackground();
          // life counters
-        this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO, this.lifeImage,INIT_NUM_LIVES, MAX_NUM_LIVES,
+        this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO,
+				this.lifeImage,INIT_NUM_LIVES, MAX_NUM_LIVES,
                 this);
     }
 
@@ -245,7 +249,8 @@ public class BrickerGameManager extends GameManager{
      */
 	public void createPuck(Vector2 location){
         //50 is the ball size, need to replace with constants
-         Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound, this);
+         Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,
+				 collisionSound, this);
 	 firstPuck.initVelocity();
 	 gameObjects().addGameObject(firstPuck);
 	}
@@ -261,7 +266,8 @@ public class BrickerGameManager extends GameManager{
     // else, create an extra paddle and add to play.
 	 Vector2 paddleLocation = new Vector2(windowController.getWindowDimensions().x()/2,
 			 windowController.getWindowDimensions().y()/2);
-	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
+	 ExtraPaddle extraPaddle = new ExtraPaddle(paddleLocation,
+			 new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),paddleImage,
 			 inputListener,
 			 EXTRA_PADDLE_HITS,
 			 new NonBrickStrategy(this));
@@ -383,11 +389,13 @@ public class BrickerGameManager extends GameManager{
 	  if (args.length>=2){
 	   int rows = Integer.parseInt(args[0]);
 	   int cols = Integer.parseInt(args[1]);
-       GameManager gameManager =new BrickerGameManager(" gameManager example =",new Vector2(700,500),rows,cols);
+       GameManager gameManager =new BrickerGameManager(" gameManager example =",
+			   new Vector2(700,500),rows,cols);
 	   gameManager.run();
 	  }
 	  else{
-	   GameManager gameManager =new BrickerGameManager(" gameManager example =",new Vector2(700,500),8,7);
+	   GameManager gameManager =new BrickerGameManager(" gameManager example =",
+			   new Vector2(700,500),8,7);
 	   gameManager.run();
 	  }
       }
