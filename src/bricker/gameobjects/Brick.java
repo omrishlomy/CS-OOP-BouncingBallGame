@@ -7,6 +7,8 @@ import danogl.util.Vector2;
 
 /**
  * class for brick object
+ * @author Omri
+ * @see danogl.GameObject
  */
 public class Brick extends GameObject {
      private final float width;

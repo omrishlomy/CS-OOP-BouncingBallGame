@@ -5,8 +5,10 @@ import java.util.Random;
 
 /**
  * class factory for creating strategies for the game's bricks
+ * @author Omri
  */
 public class CollisionStrategyFactory {
+    private final static int MAX_BEHAVIOUR_NUM = 3;
 
  private final BrickerGameManager gameManager;
  private final Random rand = new Random();
@@ -46,7 +48,7 @@ public class CollisionStrategyFactory {
    // Check if combining them fits under the limit
    int total = 1 + first.countDecorators() + second.countDecorators();
 
-   if (total <= 3) {
+   if (total <= MAX_BEHAVIOUR_NUM) {
 	return new DoubleStrategy(first, second);
    }
 

@@ -6,14 +6,16 @@ import danogl.collisions.Layer;
 
 /**
  * class Strategy for adding an extra paddle into the game after colliding with a brick
+ * @author Omri
+ * @see bricker.brick_strategies.CollisionStrategyDecorator
  */
 public class AddPaddleStrategy extends CollisionStrategyDecorator{
  private final BrickerGameManager brickerGameManager;
 
  /**
   * Strategy constructor
-  * @param brickerGameManager
-  * @param decorated
+  * @param brickerGameManager- game manager
+  * @param decorated- collision strategy object
   */
  public AddPaddleStrategy(BrickerGameManager brickerGameManager,CollisionStrategy decorated) {
   super(decorated);
@@ -22,8 +24,8 @@ public class AddPaddleStrategy extends CollisionStrategyDecorator{
 
  /**
   * calles the basic strategy and create an extra paddle to the screen using the game manager
-  * @param thisObj
-  * @param otherObj
+  * @param thisObj - game object that holds the strategy
+  * @param otherObj - game object that collided with this object
   */
  @Override
  public void onCollision(GameObject thisObj, GameObject otherObj) {

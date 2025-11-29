@@ -7,6 +7,8 @@ import bricker.main.BrickerGameManager;
 
 /**
  * class impleneting the explosion strategy
+ * @author Omri
+ * @see bricker.brick_strategies.CollisionStrategyDecorator
  */
 class ExplosionStrategy extends CollisionStrategyDecorator {
     private final BrickerGameManager gameManager;
@@ -14,8 +16,8 @@ class ExplosionStrategy extends CollisionStrategyDecorator {
 
  /**
   * Constructor
-  * @param gameManeger
-  * @param decorated
+  * @param gameManeger- game manager
+  * @param decorated - Collision Strategy object
   */
  public ExplosionStrategy(BrickerGameManager gameManeger,CollisionStrategy decorated) {
 	 super(decorated);
@@ -24,8 +26,8 @@ class ExplosionStrategy extends CollisionStrategyDecorator {
 
  /**
   * on collision method - deletes the current brick and call the onCollision method of the 4 nearby bricks
-  * @param thisObj
-  * @param otherObj
+  * @param thisObj- game object that holds the strategy
+  * @param otherObj- game object that collided with this object.
   */
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {

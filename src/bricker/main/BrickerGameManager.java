@@ -15,6 +15,8 @@ import java.awt.event.KeyEvent;
 
 /**
  * class for the Bricker game manager
+ * @author Omri & Lihi
+ * @see danogl.GameManager
  */
 public class BrickerGameManager extends GameManager{
 	 private static final float PADDLE_WIDTH=100;
@@ -54,7 +56,10 @@ public class BrickerGameManager extends GameManager{
      private int activeBricks = 0;
 
 
-	 private void createWalls(){
+    /**
+     * creates the walls in the game- 4 walls one for each side
+     */
+     private void createWalls(){
 	  //Walls
 	  GameObject leftWall = new GameObject(Vector2.ZERO, new Vector2(spacing, RUNNER_HEIGHT),null);
 	  leftWall.setTag("LeftWall");
@@ -73,7 +78,11 @@ public class BrickerGameManager extends GameManager{
 	  gameObjects().addGameObject(upperWall,Layer.STATIC_OBJECTS);
       gameObjects().addGameObject(bottomWall,Layer.STATIC_OBJECTS);
 	 }
-	 private void createClassicBricks(){
+
+    /**
+     * creates the bricks, adds them to the game and to the list of bricks
+     */
+    private void createClassicBricks(){
 	  CollisionStrategyFactory strategyFactory = new CollisionStrategyFactory(this);
 	  for (int row = 0; row < rowsNum; row++) {
 	   for (int col = 0; col < colsNum; col++) {
@@ -97,18 +106,30 @@ public class BrickerGameManager extends GameManager{
 	  }
 
 	 }
-	 private void createBackground(){
+
+    /**
+     * creates the background
+     */
+    private void createBackground(){
 	  GameObject background = new GameObject(Vector2.ZERO, new Vector2(RUNNER_WIDTH, RUNNER_HEIGHT), backgroundImage);
 	  gameObjects().addGameObject(background,Layer.BACKGROUND);
 	 }
-	 private void createBall(){
+
+    /**
+     * creates a ball and adds to the play
+     */
+    private void createBall(){
         Ball ball = new Ball(Vector2.ZERO, new Vector2(50, 50), ballImage, collisionSound);
         ball.setCenter(windowController.getWindowDimensions().mult(0.5F));
         gameObjects().addGameObject(ball);
         this.ball = ball;
 
 	 }
-	 private void createPaddle(){
+
+    /**
+     * creates a paddle and adds to the play
+     */
+    private void createPaddle(){
         GameObject userPaddle = new Paddle(
                 Vector2.ZERO,
                 new Vector2(PADDLE_WIDTH, PADDLE_HEIGHT),
@@ -217,6 +238,11 @@ public class BrickerGameManager extends GameManager{
         this.lifeCounters = new LifeCounters(Vector2.ZERO, Vector2.ZERO, this.lifeImage,INIT_NUM_LIVES, MAX_NUM_LIVES,
                 this);
     }
+
+    /**
+     * creates a puck and adds to play
+     * @param location- the location the puck will be initialized in
+     */
 	public void createPuck(Vector2 location){
         //50 is the ball size, need to replace with constants
          Puck firstPuck = new Puck(location,new Vector2(50,50),puckImage,collisionSound, this);

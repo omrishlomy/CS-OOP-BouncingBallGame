@@ -5,6 +5,7 @@ import danogl.collisions.Collision;
 
 /**
  * interface that represents a strategy for collision.
+ * @author Lihi
  */
 public interface CollisionStrategy {
     public void onCollision(GameObject thisObj, GameObject otherObj);

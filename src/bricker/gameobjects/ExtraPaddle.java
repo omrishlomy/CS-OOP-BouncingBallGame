@@ -10,6 +10,8 @@ import danogl.util.Vector2;
 
 /**
  * Extra paddle class, supporting the add Paddle strategy
+ * @author Omri
+ * @see bricker.gameobjects.Paddle
  */
 public class ExtraPaddle extends Paddle {
  	private static int extraPaddleNum=0;

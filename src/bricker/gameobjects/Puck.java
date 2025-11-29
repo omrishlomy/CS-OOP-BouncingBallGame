@@ -11,6 +11,8 @@ import java.util.Random;
 
 /**
  * class for puck balls
+ * @author Omri
+ * @see bricker.gameobjects.Ball
  */
  public class Puck extends Ball{
  private static final float RATIO = 0.75f;

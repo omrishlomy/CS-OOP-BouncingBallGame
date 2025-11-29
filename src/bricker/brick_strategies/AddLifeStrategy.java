@@ -10,7 +10,7 @@ import danogl.util.Vector2;
  * Representing a strategy that drops a heart to the user.
  * handles the collision with this brick.
  * @author Lihi
- * @see bricker.brick_strategies.CollisionStrategy
+ * @see bricker.brick_strategies.CollisionStrategyDecorator
  */
 public class AddLifeStrategy extends CollisionStrategyDecorator{
  private final BrickerGameManager gameManager;

@@ -8,6 +8,8 @@ import danogl.collisions.Layer;
 
 /**
  * class of basic collision of the game - removing the brick from the screen without further functions
+ * @author Lihi
+ * @see bricker.brick_strategies.CollisionStrategy
  */
 public class BasicCollisionStrategy implements CollisionStrategy {
  private final BrickerGameManager gameManager;
